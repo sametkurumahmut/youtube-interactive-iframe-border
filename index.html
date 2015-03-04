@@ -1,0 +1,57 @@
+<html>
+<head>
+    <title>YouTube Interactive Border</title>
+</head>
+<body style="background-color: black;">
+    <iframe id="player" height="50%" width="50%" 
+            src="https://www.youtube.com/embed/bHQqvYy5KYo?enablejsapi=1&theme=light" 
+            frameborder="1"  allowfullscreen 
+            style="position: relative; top: 25%; left: 25%;">
+    </iframe>
+    
+    <script>
+        var tag = document.createElement('script');
+
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        
+        var player;
+        var pauseClicked = false;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+        
+        function onPlayerReady(event) {
+            document.getElementById("player").style.borderStyle = "solid";
+            document.getElementById("player").style.borderColor = "#FFFFFF";
+        }
+        
+        function onPlayerStateChange(event) {
+            switch(event.data) {
+                case 0: // ended
+                    document.getElementById("player").style.borderColor = "#7f7c83";
+                    pauseClicked = false;
+                    break;
+                case 1: // playing
+                    document.getElementById("player").style.borderColor = "#32cd51";
+                    pauseClicked = false;
+                    break;
+                case 2: // paused
+                    document.getElementById("player").style.borderColor = "#f2e30d";
+                    pauseClicked = true;
+                case 3: // buffering
+                    if(!pauseClicked) {
+                        document.getElementById("player").style.borderColor = "#ff3232";
+                    }
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
